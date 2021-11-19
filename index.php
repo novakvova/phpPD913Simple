@@ -24,6 +24,7 @@ $reader = $conn->query("SELECT * FROM news");
             <th scope="col">Name</th>
             <th scope="col">Description</th>
             <th scope="col">Image</th>
+            <th scope="col">Action</th>
         </tr>
         </thead>
         <tbody>
@@ -38,6 +39,10 @@ $reader = $conn->query("SELECT * FROM news");
                 <img src='/images/{$row['image']}' alt='Bear' width='100'/>
                 
             </td>
+            
+            <td>
+                <a href='#' class='btn btn-danger btnDelete' data-id='{$row['id']}' >Delete</a>
+            </td>
         </tr>
         ";
         }
@@ -47,5 +52,27 @@ $reader = $conn->query("SELECT * FROM news");
 </div>
 
 <script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/axios.min.js"></script>
+<script>
+    window.addEventListener("load",function() {
+        var list=document.querySelectorAll(".btnDelete");
+        for (let i=0; i<list.length; i++)
+        {
+            list[i].addEventListener("click", function(e) {
+                e.preventDefault();
+                const id = e.currentTarget.dataset.id;
+                const data = new FormData();
+                data.append("id", id);
+                axios.post("/delete.php", data)
+                    .then(resp => {
+                        console.log(resp);
+                       alert("server result "+ resp.data);
+                    });
+                //alert("click delete "+ id);
+            });
+        }
+       //console.log("Load dom");
+    });
+</script>
 </body>
 </html>
